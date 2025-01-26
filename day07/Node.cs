@@ -39,11 +39,6 @@ public class Node
         get { return _Id; }
     }
 
-    public List<string> ChildIds
-    {
-        get { return _ChildIds; }
-    }
-
     public List<Node> Children
     {
         get
@@ -107,9 +102,8 @@ public class Node
         {
             List<int> totalWeights = new List<int>();
 
-            foreach(string childid in ChildIds)
+            foreach(Node child in Children)
             {
-                Node child = _AllNodes[childid];
                 totalWeights.Add(child.TotalWeight);
             }
 
@@ -126,22 +120,19 @@ public class Node
 
     public static void LinkParents()
     {
-        foreach(string nodeid in _AllNodes.Keys)
+        foreach (var node in AllNodes)
         {
-            Node node = _AllNodes[nodeid];
-            foreach(var childId in node.ChildIds)
+            foreach (var child in node.Children)
             {
-                Node child = _AllNodes[childId];
-                child.ParentId = nodeid;
+                child.ParentId = node.Id;
             }
         }
 
-        foreach(string nodeid in _AllNodes.Keys)
+        foreach (var node in AllNodes)
         {
-            Node node = _AllNodes[nodeid];
             if (node.ParentId == null)
             {
-                RootNodeId = nodeid;
+                RootNodeId = node.Id;
             }
         }
     }
